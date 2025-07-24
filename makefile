@@ -7,7 +7,10 @@ run:
 	docker-compose up
 
 initial:
-	flask db init && make migrate msg="initial" && make upgrade && docker-compose up
+	docker-compose run --rm web uv run flask db init
+	docker-compose run --rm web uv run flask db migrate -m "initial"
+	docker-compose run --rm web uv run flask db upgrade
+	docker-compose up
 
 migrate:
 	docker-compose run --rm web uv run flask db migrate -m "$(msg)"
